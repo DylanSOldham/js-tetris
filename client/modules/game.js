@@ -1,8 +1,8 @@
-import { ActorManager } from "./actormanager.js";
 import { Renderer } from "./renderer.js";
-
-import { testActor } from "./actors/testActor.js";
 import { KeyboardManager } from "./keyboardmanager.js";
+import { ActorManager } from "./actormanager.js";
+
+import { testScene0, testScene1 } from "./scenes/testScene.js";
 
 class Game {
 
@@ -19,7 +19,7 @@ class Game {
 
     Run () {
 
-        this.actorManager.addActor(testActor);
+        this.actorManager.loadScene(testScene1);
 
         this.Loop();
     }

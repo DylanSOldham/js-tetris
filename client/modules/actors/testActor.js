@@ -2,9 +2,9 @@ import { Logger } from "../logger.js";
 
 class TestActor {
 
-    constructor () {
-        this.x = 10;
-        this.y = 10;
+    constructor (x, y) {
+        this.x = x;
+        this.y = y;
         this.speed = 3;
     }
 
@@ -21,6 +21,4 @@ class TestActor {
     }
 };
 
-const testActor = new TestActor();
-
-export { testActor };
+export { TestActor };
