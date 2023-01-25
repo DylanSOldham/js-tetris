@@ -1,8 +1,6 @@
 import { Renderer } from "./renderer.js";
-import { KeyboardManager } from "./keyboardmanager.js";
+import { InputManager } from "./inputmanager.js";
 import { ActorManager } from "./actormanager.js";
-
-import { testScene0, testScene1 } from "./scenes/testScene.js";
 
 class Game {
 
@@ -12,15 +10,12 @@ class Game {
 
         this.actorManager = new ActorManager();
 
-        this.kb = new KeyboardManager(canvas);
+        this.input = new InputManager(canvas);
 
         this.quitGame = false;
     }
 
     Run () {
-
-        this.actorManager.loadScene(testScene1);
-
         this.Loop();
     }
 
@@ -35,7 +30,8 @@ class Game {
     }
 
     Update () {
-        this.actorManager.updateActors(this.kb);
+        this.actorManager.updateActors(this.input);
+        this.input.refreshInput();
     }
 
     Render () {
