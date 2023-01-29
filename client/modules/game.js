@@ -2,6 +2,8 @@ import { Renderer } from "./renderer.js";
 import { InputManager } from "./inputmanager.js";
 import { ActorManager } from "./actormanager.js";
 
+import { Scene_Tetris } from "./scenes/tetrisScene.js";
+
 class Game {
 
     constructor (canvas) {
@@ -16,6 +18,9 @@ class Game {
     }
 
     Run () {
+
+        this.actorManager.loadScene(Scene_Tetris);
+
         this.Loop();
     }
 
