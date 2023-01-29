@@ -1,30 +1,38 @@
 
 
 const TetrominoType = {
-    RED: Symbol("RED"),
-    GREEN: Symbol("GREEN"),
-    CYAN: Symbol("CYAN"),
-    PURPLE: Symbol("PURPLE"),
-    YELLOW: Symbol("YELLOW"),
-    ORANGE: Symbol("ORANGE"),
-    BLUE: Symbol("BLUE"),
+    RED: 0,
+    GREEN: 1,
+    CYAN: 2,
+    PURPLE: 3,
+    YELLOW: 4,
+    ORANGE: 5,
+    BLUE: 6,
+    random: () => {return Math.floor(Math.random()*6.999)},
 }
 
 class Tetromino {
     constructor(type) {
         this.type = type;
         this.rotation = 0; // Increments of 90 degrees clockwise from up.
+        this.xPos = 0;
+        this.yPos = 0;
     }
 
     setRotation(r) {
         this.rotation = r % 4;
     }
 
+    setX(x) {this.xPos = x;}
+    setY(y) {this.yPos = y;}
+    get x() {return this.xPos;}
+    get y() {return this.yPos;}
+
     get map() {
         let baseMap;
 
         switch (this.type) {
-            case TetrominoType.BLUE:
+            case TetrominoType.CYAN:
                 baseMap = [
                     0, 1, 0, 0,
                     0, 1, 0, 0,

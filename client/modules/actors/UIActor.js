@@ -1,4 +1,5 @@
 import { TetrominoType, Tetromino, tetrominoTypeToColor } from "../data/Tetrimino.js";
+import { Logger } from "../logger.js";
 
 class UIActor {
 
@@ -7,19 +8,32 @@ class UIActor {
         this.setPieces = [];
         this.boardWidth = 10;
         this.boardHeight = 18;
+        this.lastTime = 0;
 
-        for (let i = 0; i < this.boardWidth; ++i) {
-            for (let j = 0; j < this.boardHeight; ++j) {
-                if (Math.random()*3 < 1) {
-                    this.setPieces.push(TetrominoType.GREEN);
-                } else {
-                    this.setPieces.push(null);
-                }
-            }
+        this.activePiece = new Tetromino(TetrominoType.random());
+
+        for (let i = 0; i < this.boardWidth * this.boardHeight; ++i) {
+            this.activePieces.push(null);
+            this.setPieces.push(null);
         }
+
+        this.modifyActiveLayer();
     }
 
     Update (input) {
+
+        let currentTime = Date.now();
+        if (currentTime - this.lastTime > 200) {
+            let newActivePieces = this.modifyActiveLayer(0, 1);
+            if (!newActivePieces) {
+                this.mergeActivePieces();
+                this.activePiece = new Tetromino(TetrominoType.random());
+            } else {
+                this.activePieces = newActivePieces;
+            }
+
+            this.lastTime = currentTime;
+        }
 
     }
 
@@ -73,6 +87,51 @@ class UIActor {
         for (let i = 0; i < this.boardWidth; ++i) {
             for (let j = 0; j < this.boardHeight; ++j) {
                 this.drawPiece(renderer, i, j, this.setPieces[i + this.boardWidth*j]);
+                this.drawPiece(renderer, i, j, this.activePieces[i + this.boardWidth*j]);
+            }
+        }
+    }
+
+    modifyActiveLayer (moveX, moveY) {
+        this.activePiece.setX(this.activePiece.x + moveX);
+        this.activePiece.setY(this.activePiece.y + moveY);
+
+        let newActivePieces = this.activePieces.map(() => null);
+        let activeMap = this.activePiece.map;
+
+        for (let i = 0; i < 4; ++i) {
+            for (let j = 0; j < 4; ++j) {
+                let boardX = this.activePiece.x + i;
+                let boardY = this.activePiece.y + j;
+
+
+                if (activeMap[i + 4 * j]) {
+                    let boardPos = boardX + this.boardWidth * boardY;
+                    if (this.setPieces[boardPos] === null) {
+                        newActivePieces[boardPos] = this.activePiece.type;
+                    } else {
+                        this.activePiece.setY(this.activePiece.y - 1);
+                        return null;
+                    }
+                }
+            }
+        }
+
+        return newActivePieces;
+    }
+
+    mergeActivePieces () {
+        let activeMap = this.activePiece.map;
+        
+        for (let i = 0; i < 4; ++i) {
+            for (let j = 0; j < 4; ++j) {
+                let boardX = this.activePiece.x + i;
+                let boardY = this.activePiece.y + j;
+
+                if (activeMap[i + 4 * j]) {
+                    let boardPos = boardX + this.boardWidth * boardY;
+                    this.setPieces[boardPos] = this.activePiece.type;
+                }
             }
         }
     }
