@@ -7,7 +7,7 @@ class UIActor {
         this.activePieces = [];
         this.setPieces = [];
         this.boardWidth = 10;
-        this.boardHeight = 18;
+        this.boardHeight = 22;
         this.lastTick = 0;
         this.lastMove = 0;
 
@@ -17,6 +17,7 @@ class UIActor {
         this.mainBoardH = 0.7;
 
         this.activePiece = new Tetromino(TetrominoType.random());
+        this.score = 0;
         this.gameOver = false;
 
         for (let i = 0; i < this.boardWidth * this.boardHeight; ++i) {
@@ -87,6 +88,12 @@ class UIActor {
         this.drawBasket(renderer, this.mainBoardX, this.mainBoardY, this.mainBoardW, this.mainBoardH, thickness);
         this.drawBackground(renderer, this.mainBoardX, this.mainBoardY);
         this.drawPieces(renderer, this.mainBoardX, this.mainBoardY);
+
+        if (!this.gameOver) {
+            this.drawScoreDisplay(renderer);
+        } else {
+            this.drawGameOver(renderer);
+        }
     }
 
     drawBasket(renderer, x, y, w, h, thickness) {
@@ -100,9 +107,9 @@ class UIActor {
         let h = w * 4/3;
 
         for (let i = 0; i < this.boardWidth; ++i) {
-            for (let j = 0; j < this.boardHeight; ++j) {
+            for (let j = 4; j < this.boardHeight; ++j) {
                 renderer.drawRect(
-                    x + .013 + w*i, y + .005 + h*j, w - 0.005, h - 0.005, 
+                    x + .013 + w*i, y - 0.15 + h*j, w - 0.005, h - 0.005, 
                     {b: 25}, 
                     renderer.CoordSystem.UI
                 );
@@ -116,14 +123,14 @@ class UIActor {
             let h = w * 4/3;
 
             renderer.drawImage(
-                x + 0.01 + w*i, y + 0.003 + h*j, w, h, 
+                x + 0.01 + w*i, y - 0.153 + h*j, w, h, 
                 "../../assets/piece.png", 
                 renderer.CoordSystem.UI
             );
 
             if (!this.gameOver) {
                 renderer.drawRect(
-                    x + 0.01 + w*i, y + 0.003 + h*j, w, h,
+                    x + 0.01 + w*i, y - 0.153 + h*j, w, h,
                     tetrominoTypeToColor(type, 155), 
                     renderer.CoordSystem.UI
                 );
@@ -146,6 +153,31 @@ class UIActor {
                 );
             }
         }
+    }
+
+    drawScoreDisplay(renderer) {
+        renderer.drawText(
+            0.5, 0.87, 0.035,
+            `Score: ${this.score}`, "sans-serif", 
+            {r: 255, g: 255, b: 255}, "center",
+            renderer.CoordSystem.UI
+        );
+    }
+
+    drawGameOver(renderer) {
+        renderer.drawRect(0.0, 0.2, 1.0, 0.6, {a: 200}, renderer.CoordSystem.UI);
+        renderer.drawText(
+            0.5, 0.5, 0.1, 
+            "GAME OVER", "sans-serif", 
+            {r: 255, a: 255}, "center", 
+            renderer.CoordSystem.UI
+        );
+        renderer.drawText(
+            0.5, 0.65, 0.07, 
+            `Final Score: ${this.score}`, "sans-serif", 
+            {r: 255, a:255}, "center",
+            renderer.CoordSystem.UI
+        );
     }
 
     moveIsIllegal (piece, moveX, moveY, rotation = 0) {
@@ -212,6 +244,7 @@ class UIActor {
             }
 
             if (complete) {
+                this.score += 10;
                 this.setPieces.splice(this.boardWidth*y, this.boardWidth);
                 for (let x = 0; x < this.boardWidth; ++x) {
                     this.setPieces.unshift(null);

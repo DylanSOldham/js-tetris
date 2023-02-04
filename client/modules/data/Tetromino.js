@@ -16,7 +16,7 @@ class Tetromino {
         this.type = type;
         this.rotation = 3; // Increments of 90 degrees clockwise
         this.xPos = 3;
-        this.yPos = 0;
+        this.yPos = 2;
     }
 
     setRotation(r) {

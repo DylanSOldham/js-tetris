@@ -45,6 +45,13 @@ class Renderer {
         this.imageCache[imagePath] = img;
     }
 
+    drawText(x, y, size, text, font, color = {}, fontAlign = "center", cs = this.CoordSystem.SCREEN) {
+        this.ctx.fillStyle = makeColor(color.r, color.g, color.b, color.a);
+        this.ctx.font = Math.floor(size * cs.xscale) + "px " + font;
+        this.ctx.textAlign = fontAlign;
+        this.ctx.fillText(text, cs.xscale*x + cs.xoff, cs.yscale*y + cs.yoff);
+    }
+
     drawImage(x, y, w, h, imagePath, cs = this.CoordSystem.SCREEN) {
 
         if (!this.imageCache[imagePath]) {
