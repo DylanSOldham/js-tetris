@@ -14,8 +14,8 @@ const TetrominoType = {
 class Tetromino {
     constructor(type) {
         this.type = type;
-        this.rotation = 0; // Increments of 90 degrees clockwise from up.
-        this.xPos = 0;
+        this.rotation = 3; // Increments of 90 degrees clockwise
+        this.xPos = 3;
         this.yPos = 0;
     }
 
@@ -34,94 +34,82 @@ class Tetromino {
         switch (this.type) {
             case TetrominoType.CYAN:
                 baseMap = [
-                    0, 1, 0, 0,
-                    0, 1, 0, 0,
-                    0, 1, 0, 0,
-                    0, 1, 0, 0,
+                    [1],
+                    [1],
+                    [1],
+                    [1],
                 ];
                 break;
             case TetrominoType.GREEN:
                 baseMap = [
-                    0, 1, 0, 0,
-                    0, 1, 1, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 0,
+                    [1, 0],
+                    [1, 1],
+                    [0, 1]
                 ];
                 break;
             case TetrominoType.RED:
                 baseMap = [
-                    0, 0, 1, 0,
-                    0, 1, 1, 0,
-                    0, 1, 0, 0,
-                    0, 0, 0, 0,
+                    [0, 1,],
+                    [1, 1,],
+                    [1, 0,],
                 ];
                 break;
             case TetrominoType.YELLOW:
                 baseMap = [
-                    0, 0, 0, 0,
-                    0, 1, 1, 0,
-                    0, 1, 1, 0,
-                    0, 0, 0, 0,
+                    [1, 1],
+                    [1, 1],
                 ];
                 break;
             case TetrominoType.ORANGE:
                 baseMap = [
-                    0, 0, 0, 0,
-                    0, 1, 1, 0,
-                    0, 0, 1, 0,
-                    0, 0, 1, 0,
+                    [1, 1],
+                    [0, 1],
+                    [0, 1],
                 ];
                 break;
             
             case TetrominoType.BLUE:
                 baseMap = [
-                    0, 0, 0, 0,
-                    0, 1, 1, 0,
-                    0, 1, 0, 0,
-                    0, 1, 0, 0,
+                    [1, 1],
+                    [1, 0],
+                    [1, 0],
                 ];
                 break;
             case TetrominoType.PURPLE:
                 baseMap = [
-                    0, 0, 1, 0,
-                    0, 1, 1, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 0,
+                    [1, 1, 1],
+                    [0, 1, 0],
                 ];
                 break;
         }
 
         let rotatedMap = [];
-
         switch (this.rotation) {
             case 0:
                 rotatedMap = baseMap;
                 break;
             case 1:
-                for (let i = 0; i < rotatedMap.length(); ++i) {
-                    let x = i%4 - 2;
-                    let y = Math.floor(i/4) - 2;
-                    let newX = -y + 2;
-                    let newY = x + 2;
-                    rotatedMap[i] = baseMap[newX + 4*newY]
+                for (let i = 0; i < baseMap.length; ++i) {
+                    for (let j = 0; j < baseMap[0].length; ++j) {
+                        if (!rotatedMap[j]) rotatedMap[j] = [];
+                        rotatedMap[j][baseMap.length - 1 - i] = baseMap[i][j];
+                    }
                 }
                 break;
             case 2:
-                for (let i = 0; i < rotatedMap.length(); ++i) {
-                    let x = i%4 - 2;
-                    let y = Math.floor(i/4) - 2;
-                    let newX = -x + 2;
-                    let newY = -y + 2;
-                    rotatedMap[i] = baseMap[newX + 4*newY]
+                for (let i = 0; i < baseMap.length; ++i) {
+                    for (let j = 0; j < baseMap[0].length; ++j) {
+                        if (!rotatedMap[baseMap.length - 1 - i]) rotatedMap[baseMap.length - 1 - i] = [];
+                        rotatedMap[baseMap.length - 1 - i][baseMap[0].length - 1 - j] = baseMap[i][j];
+                    }
                 }
                 break;
             case 3:
-                for (let i = 0; i < rotatedMap.length(); ++i) {
-                    let x = i%4 - 2;
-                    let y = Math.floor(i/4) - 2;
-                    let newX = y + 2;
-                    let newY = -x + 2;
-                    rotatedMap[i] = baseMap[newX + 4*newY]
+                for (let i = 0; i < baseMap.length; ++i) {
+                    for (let j = 0; j < baseMap[0].length; ++j) {
+                        if (!rotatedMap[baseMap[0].length - 1 - j]) rotatedMap[baseMap[0].length - 1 - j] = [];
+                        rotatedMap[baseMap[0].length - 1 - j][i] = baseMap[i][j];
+                    }
                 }
                 break;
         }

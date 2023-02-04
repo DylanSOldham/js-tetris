@@ -4,6 +4,7 @@ let canvas = document.querySelector("#game-canvas");
 canvas.tabIndex = 1;
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
+canvas.focus();
 
 window.addEventListener("resize", (event) => {
     canvas.width = canvas.clientWidth;
