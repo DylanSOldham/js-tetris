@@ -124,7 +124,7 @@ class UIActor {
 
             renderer.drawImage(
                 x + 0.01 + w*i, y - 0.153 + h*j, w, h, 
-                "assets/piece.png", 
+                "./assets/piece.png", 
                 renderer.CoordSystem.UI
             );
 
